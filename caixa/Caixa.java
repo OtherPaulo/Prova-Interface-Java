@@ -1,5 +1,5 @@
 package caixa;
-
+//Paulo Vinicius Cruz Rodrigues - Matricula: 2268566
 public class Caixa {
     private String modelo;
     private String tipo;
