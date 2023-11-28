@@ -7,111 +7,123 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InterfaceCaixa extends JFrame {
+public class InterfaceCaixa implements ActionListener {
 
-    private List<Caixa> caixas;
+    JFrame tela = new JFrame("Cadastro de Caixas");
+    JPanel painel = new JPanel();
 
-    private JTextField modeloField, tipoField, tamanhoField, valorField;
-    private JLabel resultadoLabel;
+    JLabel lbmodelo = new JLabel("Modelo: ");
+    JTextField textModel = new JTextField();
+    JLabel lbtipo = new JLabel("Tipo: ");
+    JTextField textTipo = new JTextField();
+    JLabel lbtamanho = new JLabel("Tamanho: ");
+    JTextField textTamanho = new JTextField();
+    JLabel lbvalor = new JLabel("Valor: ");
+    JTextField textValor = new JTextField();
+    JLabel resultadoLabel = new JLabel();
+
+    JButton salvar = new JButton("Salvar");
+    JButton btExibirLista = new JButton("Exibir Lista");
+
+    List<Caixa> caixas = new ArrayList<>();
 
     public InterfaceCaixa() {
-        caixas = new ArrayList<>();
+        tela.setSize(400, 250);
+        tela.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        tela.setLocationRelativeTo(null);
 
-        setTitle("Cadastro e Listagem de Caixas");
-        setSize(400, 300);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new GridLayout(6, 2));
+        painel.setLayout(null);
 
-        add(new JLabel("Modelo:"));
-        modeloField = new JTextField();
-        add(modeloField);
+        lbmodelo.setBounds(10, 10, 100, 30);
+        painel.add(lbmodelo);
 
-        add(new JLabel("Tipo:"));
-        tipoField = new JTextField();
-        add(tipoField);
+        textModel.setBounds(70, 15, 120, 20);
+        painel.add(textModel);
 
-        add(new JLabel("Tamanho:"));
-        tamanhoField = new JTextField();
-        add(tamanhoField);
+        lbtipo.setBounds(10, 40, 100, 30);
+        painel.add(lbtipo);
 
-        add(new JLabel("Valor:"));
-        valorField = new JTextField();
-        add(valorField);
+        textTipo.setBounds(70, 45, 120, 20);
+        painel.add(textTipo);
 
-        JButton cadastrarButton = new JButton("Cadastrar");
-        cadastrarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                cadastrarCaixa();
-            }
-        });
-        add(cadastrarButton);
+        lbtamanho.setBounds(10, 70, 100, 30);
+        painel.add(lbtamanho);
 
-        JButton listarButton = new JButton("Listar Caixas");
-        listarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                exibirCaixas();
-            }
-        });
-        add(listarButton);
+        textTamanho.setBounds(70, 75, 120, 20);
+        painel.add(textTamanho);
 
-        resultadoLabel = new JLabel();
-        add(resultadoLabel);
+        lbvalor.setBounds(10, 110, 100, 30);
+        painel.add(lbvalor);
 
-        setVisible(true);
-    }
+        textValor.setBounds(70, 115, 120, 20);
+        painel.add(textValor);
 
-    private void cadastrarCaixa() {
-        String modelo = modeloField.getText();
-        String tipo = tipoField.getText();
-        int tamanho = Integer.parseInt(tamanhoField.getText());
-        double valor = Double.parseDouble(valorField.getText());
+        salvar.setBounds(10, 150, 75, 35);
+        salvar.addActionListener(this);
+        painel.add(salvar);
 
-        Caixa caixa = new Caixa(modelo, tipo, tamanho, valor);
-        caixas.add(caixa);
+        btExibirLista.setBounds(110, 150, 120, 35);
+        btExibirLista.addActionListener(this);
+        painel.add(btExibirLista);
 
-        resultadoLabel.setText("Caixa cadastrada com sucesso!");
-        limparCampos();
-    }
+        resultadoLabel.setBounds(10, 200, 300, 35);
+        painel.add(resultadoLabel);
 
-    private void exibirCaixas() {
-        JFrame resultadoFrame = new JFrame("Lista de Caixas");
-        resultadoFrame.setSize(400, 300);
-        resultadoFrame.setLayout(new BorderLayout());
-
-        JTextArea resultadoTextArea = new JTextArea();
-        resultadoTextArea.setEditable(false);
-
-        resultadoTextArea.append("Lista de Caixas:\n");
-        for (Caixa caixa : caixas) {
-            resultadoTextArea.append("Modelo: " + caixa.getModelo() +
-                    ", Tipo: " + caixa.getTipo() +
-                    ", Tamanho: " + caixa.getTamanho() +
-                    ", Valor: " + caixa.getValor() + "\n");
-        }
-
-        JScrollPane scrollPane = new JScrollPane(resultadoTextArea);
-
-        resultadoFrame.add(scrollPane, BorderLayout.CENTER);
-
-        resultadoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        resultadoFrame.setVisible(true);
-    }
-
-    private void limparCampos() {
-        modeloField.setText("");
-        tipoField.setText("");
-        tamanhoField.setText("");
-        valorField.setText("");
+        tela.getContentPane().add(painel);
+        tela.setVisible(true);
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new InterfaceCaixa();
-            }
-        });
+        InterfaceCaixa interfaceCaixa = new InterfaceCaixa();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == salvar) {
+            String modelo = textModel.getText();
+            String tipo = textTipo.getText();
+            int tamanho = Integer.parseInt(textTamanho.getText());
+            double valor = Double.parseDouble(textValor.getText());
+
+            Caixa caixa = new Caixa(modelo, tipo, tamanho, valor);
+            caixas.add(caixa);
+
+            resultadoLabel.setText("Caixa cadastrada com sucesso!");
+            limparCampos();
+        }
+
+        if (e.getSource() == btExibirLista) {
+            exibirListaCaixas();
+        }
+    }
+
+    private void exibirListaCaixas() {
+        JFrame listaFrame = new JFrame("Lista de Caixas");
+        listaFrame.setSize(400, 300);
+        listaFrame.setLayout(new BorderLayout());
+
+        JTextArea listaTextArea = new JTextArea();
+        listaTextArea.setEditable(false);
+
+        for (Caixa caixa : caixas) {
+            listaTextArea.append("Modelo: " + caixa.getModelo()
+                    + ", Tipo: " + caixa.getTipo()
+                    + ", Tamanho: " + caixa.getTamanho()
+                    + ", Valor: " + caixa.getValor() + "\n");
+        }
+
+        JScrollPane scrollPane = new JScrollPane(listaTextArea);
+        listaFrame.add(scrollPane, BorderLayout.CENTER);
+
+        listaFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        listaFrame.setVisible(true);
+    }
+
+    private void limparCampos() {
+        textModel.setText("");
+        textTipo.setText("");
+        textTamanho.setText("");
+        textValor.setText("");
     }
 }
+
